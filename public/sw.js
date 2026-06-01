@@ -1,5 +1,5 @@
 const CACHE_PREFIX = "url-workbench";
-const CACHE_VERSION = "2026-06-01-1";
+const CACHE_VERSION = "2026-06-02-1";
 const STATIC_CACHE = `${CACHE_PREFIX}-${CACHE_VERSION}`;
 const STATIC_ASSETS = [
   "./",
@@ -34,10 +34,14 @@ async function collectPrecacheUrls() {
     const scope = new URL(self.registration.scope);
 
     for (const match of html.matchAll(assetPattern)) {
-      const assetUrl = new URL(match[1], scope);
+      try {
+        const assetUrl = new URL(match[1], scope);
 
-      if (assetUrl.origin === scope.origin && assetUrl.pathname.startsWith(scope.pathname)) {
-        urls.add(assetUrl.toString());
+        if (assetUrl.origin === scope.origin && assetUrl.pathname.startsWith(scope.pathname)) {
+          urls.add(assetUrl.toString());
+        }
+      } catch {
+        // Ignore malformed asset references without aborting the rest of the precache list.
       }
     }
   } catch {
@@ -54,11 +58,27 @@ async function refreshCache(request, response) {
   await cache.put(request, response.clone());
 }
 
+async function precacheUrls(cache, urls) {
+  await Promise.allSettled(
+    urls.map(async (url) => {
+      try {
+        const response = await fetch(url, { cache: "reload" });
+
+        if (isCacheableResponse(response)) {
+          await cache.put(url, response);
+        }
+      } catch {
+        // Non-critical assets should not prevent the service worker from installing.
+      }
+    }),
+  );
+}
+
 self.addEventListener("install", (event) => {
   event.waitUntil(
     caches
       .open(STATIC_CACHE)
-      .then(async (cache) => cache.addAll(await collectPrecacheUrls()))
+      .then(async (cache) => precacheUrls(cache, await collectPrecacheUrls()))
       .then(() => self.skipWaiting()),
   );
 });
@@ -118,17 +138,17 @@ async function handleNavigation(request) {
 
 async function handleAsset(request) {
   const cachedResponse = await caches.match(request);
-  const networkResponsePromise = fetch(request)
-    .then(async (response) => {
-      await refreshCache(request, response);
-      return response;
-    })
-    .catch(() => undefined);
 
   if (cachedResponse) {
     return cachedResponse;
   }
 
-  const networkResponse = await networkResponsePromise;
-  return networkResponse || Response.error();
+  try {
+    const networkResponse = await fetch(request);
+
+    await refreshCache(request, networkResponse);
+    return networkResponse;
+  } catch {
+    return Response.error();
+  }
 }
