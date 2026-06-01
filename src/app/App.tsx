@@ -144,7 +144,19 @@ function App() {
       <Shell>
         <Header>
           <TitleBlock>
-            <Eyebrow>URL Workbench</Eyebrow>
+            <Eyebrow>
+              <LogoMark aria-hidden="true" viewBox="0 0 100 100" width="20" height="20">
+                <g fill="currentColor">
+                  <circle cx="36" cy="18" r="4.5" />
+                  <circle cx="64" cy="18" r="4.5" />
+                  <rect x="40" y="33" width="20" height="5" rx="2.5" transform="rotate(-12, 50, 35.5)" />
+                  <path d="M 40 56 A 10 10 0 0 1 60 56 A 10 10 0 0 1 50 64" fill="none" stroke="currentColor" strokeWidth="3.5" strokeLinecap="round" />
+                  <circle cx="50" cy="73" r="3" />
+                </g>
+                <path d="M 57 93 L 45 83 C 42 80, 42 78, 46 78 C 50 78, 52 80, 50 82 C 48 84, 44 86, 44 89 C 44 92, 48 94, 52 92 L 58 87" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
+              </LogoMark>
+              URL Workbench
+            </Eyebrow>
             <h1>URL anatomy, query parsers, and encoding in one surface.</h1>
           </TitleBlock>
           <HeaderActions>
@@ -934,11 +946,18 @@ const TitleBlock = styled.div`
 `;
 
 const Eyebrow = styled.span`
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
   color: var(--accent-strong);
   font-size: 12px;
   font-weight: 800;
   letter-spacing: 0;
   text-transform: uppercase;
+`;
+
+const LogoMark = styled.svg`
+  flex-shrink: 0;
 `;
 
 const HeaderActions = styled.div`
