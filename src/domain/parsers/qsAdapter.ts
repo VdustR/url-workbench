@@ -1,10 +1,18 @@
 import * as qs from "qs";
-import { rowsToGroupedRecord } from "../search/searchSerializers";
+import {
+  canSerializeRowsPreservingOrder,
+  rowsToGroupedRecord,
+  serializeRowsInOrder,
+} from "../search/searchSerializers";
 import type { SearchRow, SearchSettings } from "../url/types";
 
 type QsArrayFormat = "indices" | "brackets" | "repeat" | "comma";
 
 export function serializeWithQs(rows: SearchRow[], settings: SearchSettings): string {
+  if (canSerializeRowsPreservingOrder(settings)) {
+    return serializeRowsInOrder(rows, settings);
+  }
+
   const advanced = settings.advanced.qs;
   const options: qs.IStringifyOptions = {
     addQueryPrefix: false,

@@ -16,6 +16,14 @@ describe("warning engine", () => {
     expect(warnings.some((warning) => warning.id === "sort-ignores-dnd")).toBe(true);
   });
 
+  it("warns when array format groups repeated rows", () => {
+    const warnings = getWarnings({
+      rows: sampleRows,
+      settings: { ...defaultSettings, arrayStyle: "bracket-separator" },
+    });
+    expect(warnings.some((warning) => warning.id === "array-format-groups-rows")).toBe(true);
+  });
+
   it("warns about userinfo in the URL", () => {
     const warnings = getWarnings({
       parts: {

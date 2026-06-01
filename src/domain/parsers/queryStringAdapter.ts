@@ -1,5 +1,10 @@
 import queryString from "query-string";
-import { rowsContainBracketNotation, rowsToGroupedRecord } from "../search/searchSerializers";
+import {
+  canSerializeRowsPreservingOrder,
+  rowsContainBracketNotation,
+  rowsToGroupedRecord,
+  serializeRowsInOrder,
+} from "../search/searchSerializers";
 import type { SearchRow, SearchSettings } from "../url/types";
 
 type QueryStringArrayFormat =
@@ -12,6 +17,10 @@ type QueryStringArrayFormat =
   | "colon-list-separator";
 
 export function serializeWithQueryString(rows: SearchRow[], settings: SearchSettings): string {
+  if (canSerializeRowsPreservingOrder(settings)) {
+    return serializeRowsInOrder(rows, settings);
+  }
+
   const advanced = settings.advanced.queryString;
   return queryString.stringify(rowsToGroupedRecord(rows), {
     arrayFormat: toQueryStringArrayFormat(settings.arrayStyle),

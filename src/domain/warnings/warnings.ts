@@ -1,4 +1,5 @@
 import type { SearchRow, SearchSettings, UrlParts } from "../url/types";
+import { canSerializeRowsPreservingOrder } from "../search/searchSerializers";
 
 export interface WorkbenchWarning {
   id: string;
@@ -69,6 +70,15 @@ export function getWarnings(input: WarningInput): WorkbenchWarning[] {
       id: "sort-ignores-dnd",
       severity: "warning",
       message: "Current sort mode ignores drag-and-drop row order in output.",
+    });
+  }
+
+  if (input.settings.sort === "preserveRows" && !canSerializeRowsPreservingOrder(input.settings)) {
+    warnings.push({
+      id: "array-format-groups-rows",
+      severity: "info",
+      message:
+        "Current array format groups repeated keys; row order is preserved only between groups.",
     });
   }
 

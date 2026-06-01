@@ -221,7 +221,7 @@ function serializeRows(rows: SearchRow[], settings: SearchSettings): string {
 function parseSerializedSearch(serialized: string, settings: SearchSettings): unknown {
   if (settings.mode === "qs") return parseWithQs(serialized, settings);
   if (settings.mode === "query-string") return parseWithQueryString(serialized, settings);
-  return Object.fromEntries(new URLSearchParams(serialized).entries());
+  return Array.from(new URLSearchParams(serialized).entries());
 }
 
 function readInitialState(): WorkbenchState {

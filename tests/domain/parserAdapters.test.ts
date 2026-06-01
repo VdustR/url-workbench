@@ -22,14 +22,24 @@ describe("parser adapters", () => {
     expect(serializeWithNative(rows)).toBe("space=a+b");
   });
 
-  it("serializes qs repeat arrays as duplicate keys", () => {
+  it("serializes qs repeat arrays in row order", () => {
     expect(
       serializeWithQs(sampleRows, {
         ...defaultSettings,
         mode: "qs",
         arrayStyle: "repeat",
       }),
-    ).toBe("tag=ui&tag=url&empty=&preview");
+    ).toBe("tag=ui&empty=&tag=url&preview");
+  });
+
+  it("serializes query-string repeat arrays in row order", () => {
+    expect(
+      serializeWithQueryString(sampleRows, {
+        ...defaultSettings,
+        mode: "query-string",
+        arrayStyle: "repeat",
+      }),
+    ).toBe("tag=ui&empty=&tag=url&preview");
   });
 
   it("serializes query-string bracket-separator arrays", () => {
