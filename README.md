@@ -13,7 +13,7 @@ Repository: https://github.com/VdustR/url-workbench
 ## Features
 
 - Editable total URL plus protocol, hostname, port, path, search, hash, username, and password fields.
-- Node-style URL readouts for `href`, `host`, `hostname`, `port`, `origin`, `pathname`, `search`, and `hash`.
+- Node-style URL readouts for derived `host` and `origin` values.
 - Ordered search parameter rows with enable toggles, add, duplicate, delete, keyboard reorder, and drag-and-drop sorting.
 - Parser modes for native `URLSearchParams`, `qs`, and `query-string`.
 - Advanced `qs` and `query-string` options for array formats, sorting, encoding, charset, null handling, parsing limits, dot notation, and primitive parsing.
