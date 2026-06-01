@@ -1,5 +1,5 @@
 const CACHE_PREFIX = "url-workbench";
-const CACHE_VERSION = "2026-06-02-2";
+const CACHE_VERSION = "2026-06-02-3";
 const STATIC_CACHE = `${CACHE_PREFIX}-${CACHE_VERSION}`;
 const STATIC_ASSETS = [
   "./",
@@ -18,13 +18,14 @@ function scopedUrl(path) {
 }
 
 function isCacheableResponse(response) {
-  return response && response.ok && response.type !== "opaque";
+  return Boolean(response && response.ok && response.type !== "opaque");
 }
 
 function isAppShellResponse(response) {
-  return (
-    isCacheableResponse(response) && response.headers.get("content-type")?.includes("text/html")
-  );
+  if (!isCacheableResponse(response)) return false;
+
+  const contentType = response.headers.get("content-type");
+  return contentType ? contentType.includes("text/html") : false;
 }
 
 async function collectPrecacheUrls() {
@@ -136,12 +137,12 @@ async function handleNavigation(request) {
 
     return response;
   } catch {
+    const cachedResponse = await caches.match(request);
+
+    if (cachedResponse) return cachedResponse;
+
     const cachedShell = await caches.match(appShell);
-
-    if (cachedShell) return cachedShell;
-
-    const cachedRequest = await caches.match(request);
-    return cachedRequest || Response.error();
+    return cachedShell || Response.error();
   }
 }
 
