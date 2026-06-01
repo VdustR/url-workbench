@@ -2,7 +2,7 @@
   "name": "url-workbench",
   "version": "0.0.0",
   "private": true,
-  "description": "A URL workbench for inspecting, editing, comparing, encoding, and sharing links.",
+  "description": "Inspect URL anatomy, edit query parameters, compare parser output, test encoding, and share reproducible URL states.",
   "keywords": [
     "qs",
     "query-string",

@@ -4,7 +4,7 @@
 
 # URL Workbench
 
-URL Workbench is a React and TypeScript single-page tool for inspecting, editing, comparing, encoding, and sharing URLs. It exposes URL anatomy, ordered search parameter rows, parser comparisons, encoding previews, warnings, generated code, and shareable `?url=` / `?state=` links.
+Inspect URL anatomy, edit query parameters, compare parser output, test encoding, and share reproducible URL states.
 
 Live app: https://vdustr.dev/url-workbench/
 
@@ -13,11 +13,12 @@ Repository: https://github.com/VdustR/url-workbench
 ## Features
 
 - Editable total URL plus protocol, hostname, port, path, search, hash, username, and password fields.
-- Node-style URL readouts for `href`, `host`, `hostname`, `port`, `origin`, `pathname`, `search`, and `hash`.
+- Node-style URL readouts for derived `host` and `origin` values.
 - Ordered search parameter rows with enable toggles, add, duplicate, delete, keyboard reorder, and drag-and-drop sorting.
 - Parser modes for native `URLSearchParams`, `qs`, and `query-string`.
 - Advanced `qs` and `query-string` options for array formats, sorting, encoding, charset, null handling, parsing limits, dot notation, and primitive parsing.
 - Encoding comparison for browser-native `encodeURI`, `encodeURIComponent`, strict RFC 3986, and form-style plus encoding.
+- Installable PWA metadata and service worker caching for returning to the workbench offline after the first online visit.
 - GitHub Pages deployment through GitHub Actions.
 
 ## Query Parser Coverage
