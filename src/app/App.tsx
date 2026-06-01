@@ -144,43 +144,51 @@ function App() {
       <Shell>
         <Header>
           <TitleBlock>
-            <Eyebrow>
-              <LogoMark aria-hidden="true" viewBox="0 0 100 100" width="20" height="20">
-                <g fill="currentColor">
-                  <circle cx="36" cy="18" r="4.5" />
-                  <circle cx="64" cy="18" r="4.5" />
-                  <rect
-                    x="40"
-                    y="33"
-                    width="20"
-                    height="5"
-                    rx="2.5"
-                    transform="rotate(-12, 50, 35.5)"
-                  />
+            <BrandRow>
+              <LogoBadge>
+                <LogoMark aria-hidden="true" viewBox="0 0 100 100" width="30" height="30">
+                  <g fill="currentColor">
+                    <circle cx="36" cy="18" r="4.5" />
+                    <circle cx="64" cy="18" r="4.5" />
+                    <rect
+                      x="40"
+                      y="33"
+                      width="20"
+                      height="5"
+                      rx="2.5"
+                      transform="rotate(-12, 50, 35.5)"
+                    />
+                    <path
+                      d="M 40 56 A 10 10 0 0 1 60 56 A 10 10 0 0 1 50 64"
+                      fill="none"
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeWidth="3.5"
+                    />
+                    <circle cx="50" cy="73" r="3" />
+                  </g>
                   <path
-                    d="M 40 56 A 10 10 0 0 1 60 56 A 10 10 0 0 1 50 64"
+                    d="M 57 93 L 45 83 C 42 80, 42 78, 46 78 C 50 78, 52 80, 50 82 C 48 84, 44 86, 44 89 C 44 92, 48 94, 52 92 L 58 87"
                     fill="none"
                     stroke="currentColor"
-                    strokeWidth="3.5"
                     strokeLinecap="round"
+                    strokeLinejoin="round"
+                    strokeWidth="3"
                   />
-                  <circle cx="50" cy="73" r="3" />
-                </g>
-                <path
-                  d="M 57 93 L 45 83 C 42 80, 42 78, 46 78 C 50 78, 52 80, 50 82 C 48 84, 44 86, 44 89 C 44 92, 48 94, 52 92 L 58 87"
-                  fill="none"
-                  stroke="currentColor"
-                  strokeWidth="3"
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </LogoMark>
-              URL Workbench
-            </Eyebrow>
-            <h1>URL anatomy, query parsers, and encoding in one surface.</h1>
+                </LogoMark>
+              </LogoBadge>
+              <BrandCopy>
+                <Eyebrow>Developer utility</Eyebrow>
+                <h1>URL Workbench</h1>
+              </BrandCopy>
+            </BrandRow>
+            <p>
+              Inspect URL anatomy, edit query parameters, compare parser output, test encoding, and
+              share reproducible URL states.
+            </p>
           </TitleBlock>
           <HeaderActions>
-            <Pill>{settings.mode}</Pill>
+            <Pill aria-label={`Current parser: ${settings.mode}`}>Parser: {settings.mode}</Pill>
             <Button type="button" onClick={copyShareLink}>
               Copy share link
             </Button>
@@ -293,8 +301,6 @@ function AnatomyPanel({ parts }: { parts: UrlParts }) {
       />
       <Readout label="host" value={parts.host} />
       <Readout label="origin" value={parts.origin} />
-      <Readout label="hostname" value={parts.hostname} />
-      <Readout label="href" value={parts.href} wide />
     </AnatomyGrid>
   );
 }
@@ -369,7 +375,7 @@ function SortableSearchRow({
         {...attributes}
         {...listeners}
       >
-        ::
+        ⋮⋮
       </DragHandle>
       <Toggle
         label={row.enabled ? "enabled" : "disabled"}
@@ -405,23 +411,35 @@ function SortableSearchRow({
           type="button"
           aria-label="Move up"
           disabled={index === 0}
+          title="Move up"
           onClick={() => moveRowByStep(row.id, -1)}
         >
-          up
+          ↑
         </IconButton>
         <IconButton
           type="button"
           aria-label="Move down"
           disabled={index === count - 1}
+          title="Move down"
           onClick={() => moveRowByStep(row.id, 1)}
         >
-          down
+          ↓
         </IconButton>
-        <IconButton type="button" aria-label="Duplicate" onClick={() => copyRow(row.id)}>
-          copy
+        <IconButton
+          type="button"
+          aria-label="Duplicate"
+          title="Duplicate"
+          onClick={() => copyRow(row.id)}
+        >
+          ⧉
         </IconButton>
-        <DangerButton type="button" aria-label="Remove" onClick={() => removeRow(row.id)}>
-          del
+        <DangerButton
+          type="button"
+          aria-label="Remove"
+          title="Remove"
+          onClick={() => removeRow(row.id)}
+        >
+          ×
         </DangerButton>
       </RowActions>
     </RowItem>
@@ -446,6 +464,7 @@ function SettingsPanel({ settings }: { settings: SearchSettings }) {
           <SegmentButton
             key={option.value}
             type="button"
+            aria-pressed={settings.mode === option.value}
             data-active={settings.mode === option.value || undefined}
             onClick={() => setSearchSettings({ mode: option.value })}
           >
@@ -859,24 +878,31 @@ function toJson(value: unknown): string {
 
 const globalStyles = css`
   :root {
-    --canvas: #f5f7fb;
-    --panel: #ffffff;
-    --panel-strong: #fdfefe;
-    --ink: #111827;
-    --muted: #526070;
-    --subtle: #7a8797;
-    --line: #d8dee8;
-    --line-strong: #b9c3d1;
-    --accent: #0f766e;
-    --accent-strong: #0b5f59;
-    --accent-soft: #dff7f3;
-    --blue: #1d4ed8;
-    --blue-soft: #e4edff;
-    --amber: #9a5b00;
-    --amber-soft: #fff3d6;
-    --red: #b42318;
-    --red-soft: #ffe6e2;
-    --shadow: 0 1px 2px rgba(15, 23, 42, 0.08), 0 12px 30px rgba(15, 23, 42, 0.08);
+    --canvas: oklch(0.972 0.007 235);
+    --panel: oklch(0.996 0.003 185);
+    --panel-strong: oklch(0.99 0.005 205);
+    --field: oklch(0.998 0.002 190);
+    --field-disabled: oklch(0.955 0.007 225);
+    --ink: oklch(0.2 0.033 255);
+    --ink-hover: oklch(0.29 0.035 255);
+    --inverse-ink: oklch(0.986 0.004 190);
+    --muted: oklch(0.45 0.033 245);
+    --subtle: oklch(0.59 0.027 245);
+    --line: oklch(0.885 0.016 235);
+    --line-strong: oklch(0.78 0.027 235);
+    --control: oklch(0.94 0.012 225);
+    --control-hover: oklch(0.9 0.018 225);
+    --accent: oklch(0.5 0.098 185);
+    --accent-strong: oklch(0.39 0.085 185);
+    --accent-soft: oklch(0.935 0.045 185);
+    --blue: oklch(0.49 0.15 260);
+    --blue-soft: oklch(0.93 0.032 260);
+    --focus-ring: oklch(0.83 0.085 205);
+    --amber: oklch(0.51 0.12 70);
+    --amber-soft: oklch(0.94 0.045 85);
+    --red: oklch(0.48 0.16 30);
+    --red-soft: oklch(0.93 0.052 28);
+    --shadow: 0 1px 2px oklch(0.2 0.033 255 / 0.08), 0 12px 30px oklch(0.2 0.033 255 / 0.08);
     --mono: "SFMono-Regular", "Cascadia Code", "Roboto Mono", Consolas, monospace;
     --sans:
       Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -924,6 +950,15 @@ const globalStyles = css`
   h2 {
     text-wrap: balance;
   }
+
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+      scroll-behavior: auto !important;
+      transition-duration: 0.001ms !important;
+    }
+  }
 `;
 
 const Shell = styled.main`
@@ -942,7 +977,7 @@ const Header = styled.header`
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
   gap: 16px;
-  align-items: end;
+  align-items: center;
   padding: 10px 2px 14px;
 
   @media (max-width: 760px) {
@@ -953,16 +988,54 @@ const Header = styled.header`
 
 const TitleBlock = styled.div`
   display: grid;
-  gap: 4px;
+  gap: 7px;
 
   h1 {
-    max-width: 860px;
     color: var(--ink);
-    font-size: 26px;
-    font-weight: 720;
-    line-height: 1.15;
+    font-size: 30px;
+    font-weight: 760;
+    line-height: 1.1;
     letter-spacing: 0;
   }
+
+  p {
+    max-width: 660px;
+    color: var(--muted);
+    font-size: 15px;
+    line-height: 1.45;
+    letter-spacing: 0;
+    text-wrap: balance;
+  }
+`;
+
+const BrandRow = styled.div`
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  min-width: 0;
+`;
+
+const LogoBadge = styled.span`
+  width: 42px;
+  height: 42px;
+  display: inline-grid;
+  flex: 0 0 auto;
+  place-items: center;
+  border-radius: 8px;
+  color: var(--accent-strong);
+  background: var(--accent-soft);
+  box-shadow: inset 0 0 0 1px oklch(0.5 0.098 185 / 0.1);
+`;
+
+const LogoMark = styled.svg`
+  display: block;
+  flex-shrink: 0;
+`;
+
+const BrandCopy = styled.div`
+  display: grid;
+  gap: 1px;
+  min-width: 0;
 `;
 
 const Eyebrow = styled.span`
@@ -974,10 +1047,6 @@ const Eyebrow = styled.span`
   font-weight: 800;
   letter-spacing: 0;
   text-transform: uppercase;
-`;
-
-const LogoMark = styled.svg`
-  flex-shrink: 0;
 `;
 
 const HeaderActions = styled.div`
@@ -1000,6 +1069,11 @@ const Pill = styled.span`
   color: var(--accent-strong);
   background: var(--accent-soft);
   font-weight: 800;
+  white-space: nowrap;
+
+  @media (max-width: 760px) {
+    min-height: 44px;
+  }
 `;
 
 const Button = styled.button`
@@ -1007,17 +1081,17 @@ const Button = styled.button`
   border: 0;
   border-radius: 8px;
   padding: 0 13px;
-  color: #ffffff;
+  color: var(--inverse-ink);
   background: var(--ink);
   font-weight: 750;
   cursor: pointer;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.18);
+  box-shadow: 0 1px 2px oklch(0.2 0.033 255 / 0.18);
   transition-property: background-color, transform, box-shadow;
   transition-duration: 150ms;
   transition-timing-function: cubic-bezier(0.2, 0, 0, 1);
 
   &:hover {
-    background: #263244;
+    background: var(--ink-hover);
   }
 
   &:active {
@@ -1025,8 +1099,12 @@ const Button = styled.button`
   }
 
   &:focus-visible {
-    outline: 3px solid var(--blue-soft);
+    outline: 3px solid var(--focus-ring);
     outline-offset: 2px;
+  }
+
+  @media (max-width: 760px) {
+    min-height: 44px;
   }
 `;
 
@@ -1046,7 +1124,7 @@ const UrlInput = styled.input`
   border-radius: 8px;
   padding: 0 14px;
   color: var(--ink);
-  background: #ffffff;
+  background: var(--field);
   font-family: var(--mono);
   font-size: 15px;
   letter-spacing: 0;
@@ -1162,7 +1240,7 @@ const TextInput = styled.input`
   border-radius: 7px;
   padding: 0 10px;
   color: var(--ink);
-  background: #ffffff;
+  background: var(--field);
   font-family: var(--mono);
   font-size: 13px;
   letter-spacing: 0;
@@ -1172,13 +1250,17 @@ const TextInput = styled.input`
 
   &:disabled {
     color: var(--subtle);
-    background: #f1f4f8;
+    background: var(--field-disabled);
     cursor: not-allowed;
   }
 
   &:focus {
     border-color: var(--accent);
     box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+
+  @media (max-width: 760px) {
+    min-height: 44px;
   }
 `;
 
@@ -1189,7 +1271,7 @@ const TextSelect = styled.select`
   border-radius: 7px;
   padding: 0 34px 0 10px;
   color: var(--ink);
-  background: #ffffff;
+  background: var(--field);
   outline: none;
   transition-property: border-color, box-shadow;
   transition-duration: 150ms;
@@ -1197,6 +1279,10 @@ const TextSelect = styled.select`
   &:focus {
     border-color: var(--accent);
     box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+
+  @media (max-width: 760px) {
+    min-height: 44px;
   }
 `;
 
@@ -1206,8 +1292,8 @@ const ReadoutBox = styled.div`
   min-width: 0;
   padding: 10px;
   border-radius: 7px;
-  background: #f6f8fb;
-  box-shadow: inset 0 0 0 1px rgba(17, 24, 39, 0.08);
+  background: var(--panel-strong);
+  box-shadow: inset 0 0 0 1px oklch(0.2 0.033 255 / 0.08);
 
   &[data-wide] {
     grid-column: 1 / -1;
@@ -1239,8 +1325,8 @@ const EmptyBox = styled.div`
   place-items: center;
   border-radius: 8px;
   color: var(--muted);
-  background: #f6f8fb;
-  box-shadow: inset 0 0 0 1px rgba(17, 24, 39, 0.08);
+  background: var(--panel-strong);
+  box-shadow: inset 0 0 0 1px oklch(0.2 0.033 255 / 0.08);
 `;
 
 const RowsArea = styled.div`
@@ -1251,7 +1337,7 @@ const RowsArea = styled.div`
 
 const RowsHeader = styled.div`
   display: grid;
-  grid-template-columns: 42px 46px minmax(130px, 1fr) minmax(130px, 1fr) 128px minmax(220px, auto);
+  grid-template-columns: 44px 46px minmax(130px, 1fr) minmax(130px, 1fr) 128px minmax(196px, auto);
   gap: 8px;
   padding: 0 8px;
   color: var(--muted);
@@ -1272,7 +1358,7 @@ const RowsList = styled.div`
 
 const RowItem = styled.div`
   display: grid;
-  grid-template-columns: 42px 46px minmax(130px, 1fr) minmax(130px, 1fr) 128px minmax(220px, auto);
+  grid-template-columns: 44px 46px minmax(130px, 1fr) minmax(130px, 1fr) 128px minmax(196px, auto);
   gap: 8px;
   align-items: center;
   min-width: 0;
@@ -1280,25 +1366,25 @@ const RowItem = styled.div`
   padding: 7px;
   border-radius: 8px;
   background: var(--panel-strong);
-  box-shadow: inset 0 0 0 1px rgba(17, 24, 39, 0.1);
+  box-shadow: inset 0 0 0 1px oklch(0.2 0.033 255 / 0.1);
 
   &[data-dragging] {
-    box-shadow: 0 16px 30px rgba(15, 23, 42, 0.16);
+    box-shadow: 0 16px 30px oklch(0.2 0.033 255 / 0.16);
   }
 
   @media (max-width: 900px) {
-    grid-template-columns: 42px 46px minmax(0, 1fr);
+    grid-template-columns: 44px 46px minmax(0, 1fr);
     align-items: start;
   }
 `;
 
 const DragHandle = styled.button`
-  min-width: 40px;
-  min-height: 40px;
+  min-width: 44px;
+  min-height: 44px;
   border: 0;
   border-radius: 7px;
   color: var(--muted);
-  background: #eef3f7;
+  background: var(--control);
   font-family: var(--mono);
   font-weight: 900;
   cursor: grab;
@@ -1311,7 +1397,7 @@ const DragHandle = styled.button`
   }
 
   &:focus-visible {
-    outline: 3px solid var(--blue-soft);
+    outline: 3px solid var(--focus-ring);
     outline-offset: 2px;
   }
 `;
@@ -1324,7 +1410,7 @@ const InlineInput = styled.input`
   border-radius: 7px;
   padding: 0 10px;
   color: var(--ink);
-  background: #ffffff;
+  background: var(--field);
   font-family: var(--mono);
   font-size: 13px;
   letter-spacing: 0;
@@ -1334,7 +1420,7 @@ const InlineInput = styled.input`
 
   &:disabled {
     color: var(--subtle);
-    background: #f1f4f8;
+    background: var(--field-disabled);
   }
 
   &:focus {
@@ -1344,6 +1430,10 @@ const InlineInput = styled.input`
 
   @media (max-width: 900px) {
     grid-column: 3;
+  }
+
+  @media (max-width: 760px) {
+    min-height: 44px;
   }
 `;
 
@@ -1355,7 +1445,7 @@ const InlineSelect = styled.select`
   border-radius: 7px;
   padding: 0 8px;
   color: var(--ink);
-  background: #ffffff;
+  background: var(--field);
   outline: none;
 
   &:focus {
@@ -1366,33 +1456,40 @@ const InlineSelect = styled.select`
   @media (max-width: 900px) {
     grid-column: 3;
   }
+
+  @media (max-width: 760px) {
+    min-height: 44px;
+  }
 `;
 
 const RowActions = styled.div`
   display: grid;
-  grid-template-columns: repeat(4, minmax(45px, 1fr));
+  grid-template-columns: repeat(4, 44px);
   gap: 6px;
+  justify-content: end;
 
   @media (max-width: 900px) {
     grid-column: 1 / -1;
+    grid-template-columns: repeat(4, minmax(44px, 1fr));
+    justify-content: stretch;
   }
 `;
 
 const IconButton = styled.button`
-  min-height: 40px;
+  min-height: 44px;
   border: 0;
   border-radius: 7px;
   padding: 0 9px;
   color: var(--ink);
-  background: #eef3f7;
-  font-size: 12px;
+  background: var(--control);
+  font-size: 15px;
   font-weight: 800;
   cursor: pointer;
   transition-property: background-color, transform, opacity;
   transition-duration: 150ms;
 
   &:hover:not(:disabled) {
-    background: #dfe8f0;
+    background: var(--control-hover);
   }
 
   &:active:not(:disabled) {
@@ -1405,7 +1502,7 @@ const IconButton = styled.button`
   }
 
   &:focus-visible {
-    outline: 3px solid var(--blue-soft);
+    outline: 3px solid var(--focus-ring);
     outline-offset: 2px;
   }
 `;
@@ -1421,7 +1518,7 @@ const ModeGrid = styled.div`
   gap: 6px;
   padding: 4px;
   border-radius: 8px;
-  background: #eef3f7;
+  background: var(--control);
 
   @media (max-width: 500px) {
     grid-template-columns: 1fr;
@@ -1442,8 +1539,8 @@ const SegmentButton = styled.button`
 
   &[data-active] {
     color: var(--ink);
-    background: #ffffff;
-    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.12);
+    background: var(--field);
+    box-shadow: 0 1px 2px oklch(0.2 0.033 255 / 0.12);
   }
 
   &:active {
@@ -1451,8 +1548,12 @@ const SegmentButton = styled.button`
   }
 
   &:focus-visible {
-    outline: 3px solid var(--blue-soft);
+    outline: 3px solid var(--focus-ring);
     outline-offset: 2px;
+  }
+
+  @media (max-width: 760px) {
+    min-height: 44px;
   }
 `;
 
@@ -1468,15 +1569,15 @@ const SettingsGrid = styled.div`
 `;
 
 const BooleanRow = styled.div`
-  min-height: 40px;
+  min-height: 44px;
   display: flex;
   gap: 10px;
   align-items: center;
   justify-content: space-between;
   padding: 0 10px;
   border-radius: 7px;
-  background: #f6f8fb;
-  box-shadow: inset 0 0 0 1px rgba(17, 24, 39, 0.08);
+  background: var(--panel-strong);
+  box-shadow: inset 0 0 0 1px oklch(0.2 0.033 255 / 0.08);
   color: var(--ink);
   font-size: 13px;
   font-weight: 700;
@@ -1484,16 +1585,28 @@ const BooleanRow = styled.div`
 
 const ToggleRoot = styled(Checkbox.Root)`
   position: relative;
-  width: 40px;
-  min-width: 40px;
-  height: 24px;
+  width: 44px;
+  min-width: 44px;
+  height: 44px;
   border-radius: 999px;
-  background: #cbd5e1;
+  background: transparent;
   cursor: pointer;
   transition-property: background-color, transform;
   transition-duration: 150ms;
 
-  &[data-checked] {
+  &::before {
+    content: "";
+    position: absolute;
+    top: 10px;
+    right: 2px;
+    left: 2px;
+    height: 24px;
+    border-radius: 999px;
+    background: var(--line-strong);
+    transition: background-color 150ms;
+  }
+
+  &[data-checked]::before {
     background: var(--accent);
   }
 
@@ -1502,20 +1615,20 @@ const ToggleRoot = styled(Checkbox.Root)`
   }
 
   &:focus-visible {
-    outline: 3px solid var(--blue-soft);
+    outline: 3px solid var(--focus-ring);
     outline-offset: 2px;
   }
 `;
 
 const ToggleIndicator = styled(Checkbox.Indicator)`
   position: absolute;
-  top: 4px;
-  left: 4px;
+  top: 14px;
+  left: 6px;
   width: 16px;
   height: 16px;
   border-radius: 999px;
-  background: #ffffff;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.25);
+  background: var(--field);
+  box-shadow: 0 1px 2px oklch(0.2 0.033 255 / 0.25);
   transition-property: transform;
   transition-duration: 150ms;
 
@@ -1531,10 +1644,11 @@ const TabList = styled(Tabs.List)`
   margin-bottom: 10px;
   padding: 4px;
   border-radius: 8px;
-  background: #eef3f7;
+  background: var(--control);
 
   button {
-    min-height: 38px;
+    min-height: 40px;
+    min-width: 44px;
     border: 0;
     border-radius: 7px;
     padding: 0 11px;
@@ -1548,8 +1662,8 @@ const TabList = styled(Tabs.List)`
 
   button[data-selected] {
     color: var(--ink);
-    background: #ffffff;
-    box-shadow: 0 1px 2px rgba(15, 23, 42, 0.12);
+    background: var(--field);
+    box-shadow: 0 1px 2px oklch(0.2 0.033 255 / 0.12);
   }
 
   button:active {
@@ -1557,8 +1671,14 @@ const TabList = styled(Tabs.List)`
   }
 
   button:focus-visible {
-    outline: 3px solid var(--blue-soft);
+    outline: 3px solid var(--focus-ring);
     outline-offset: 2px;
+  }
+
+  @media (max-width: 760px) {
+    button {
+      min-height: 44px;
+    }
   }
 `;
 
@@ -1573,9 +1693,9 @@ const CodeBlock = styled.pre`
   margin: 0;
   padding: 12px;
   border-radius: 8px;
-  color: #07121f;
-  background: #f6f8fb;
-  box-shadow: inset 0 0 0 1px rgba(17, 24, 39, 0.08);
+  color: var(--ink);
+  background: var(--panel-strong);
+  box-shadow: inset 0 0 0 1px oklch(0.2 0.033 255 / 0.08);
   font-family: var(--mono);
   font-size: 12px;
   line-height: 1.55;
