@@ -1,3 +1,7 @@
+<p align="center">
+  <img src="public/favicon.svg" width="80" height="80" alt="URL Workbench">
+</p>
+
 # URL Workbench
 
 URL Workbench is a React and TypeScript single-page tool for inspecting, editing, comparing, encoding, and sharing URLs. It exposes URL anatomy, ordered search parameter rows, parser comparisons, encoding previews, warnings, generated code, and shareable `?url=` / `?state=` links.
