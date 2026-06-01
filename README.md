@@ -70,6 +70,8 @@ The workflow uses:
 - `actions/upload-pages-artifact@v5`
 - `actions/deploy-pages@v5`
 
+Pull requests run install, check, test, and build. Pushes to `main` also upload the build artifact and deploy to GitHub Pages.
+
 The Vite base path is `/url-workbench/` in GitHub Actions and `/` locally.
 
 ## Stack
