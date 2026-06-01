@@ -126,9 +126,14 @@ function App() {
   async function copyShareLink() {
     const shareUrl = currentShareUrl();
     if (typeof navigator !== "undefined" && navigator.clipboard) {
-      await navigator.clipboard.writeText(shareUrl);
-      setShareState("Copied");
-      return;
+      try {
+        await navigator.clipboard.writeText(shareUrl);
+        setShareState("Copied");
+        window.setTimeout(() => setShareState("Ready"), 2000);
+        return;
+      } catch {
+        setShareState("Copy failed");
+      }
     }
     setShareState(shareUrl);
   }

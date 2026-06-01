@@ -14,7 +14,7 @@ export function rowsToRepeatedEntries(rows: SearchRow[]): Array<[string, RowPrim
 export function rowsToGroupedRecord(
   rows: SearchRow[],
 ): Record<string, RowPrimitiveValue | RowPrimitiveValue[]> {
-  const record: Record<string, RowPrimitiveValue | RowPrimitiveValue[]> = {};
+  const record: Record<string, RowPrimitiveValue | RowPrimitiveValue[]> = Object.create(null);
 
   for (const [key, value] of rowsToRepeatedEntries(rows)) {
     const current = record[key];

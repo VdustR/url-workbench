@@ -5,6 +5,7 @@ import {
   queryStringSupportsRows,
   serializeWithQueryString,
 } from "../../src/domain/parsers/queryStringAdapter";
+import { rowsToGroupedRecord } from "../../src/domain/search/searchSerializers";
 import type { SearchRow } from "../../src/domain/url/types";
 import { defaultSettings, sampleRows } from "../../src/test/fixtures";
 
@@ -64,5 +65,28 @@ describe("parser adapters", () => {
         },
       ]),
     ).toBe(false);
+  });
+
+  it("uses a prototype-free record for user-controlled keys", () => {
+    const record = rowsToGroupedRecord([
+      {
+        id: "proto",
+        enabled: true,
+        key: "__proto__",
+        value: "polluted",
+        valueKind: "value",
+      },
+      {
+        id: "to-string",
+        enabled: true,
+        key: "toString",
+        value: "safe",
+        valueKind: "value",
+      },
+    ]);
+
+    expect(Object.getPrototypeOf(record)).toBe(null);
+    expect(record["__proto__"]).toBe("polluted");
+    expect(record["toString"]).toBe("safe");
   });
 });
