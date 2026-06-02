@@ -9,7 +9,6 @@
   "display_override": ["window-controls-overlay", "standalone", "minimal-ui", "browser"],
   "background_color": "#f5f7fb",
   "theme_color": "#0f766e",
-  "orientation": "any",
   "categories": ["developer", "productivity", "utilities"],
   "icons": [
     {
