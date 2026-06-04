@@ -18,7 +18,7 @@ Repository: https://github.com/VdustR/url-workbench
 - Parser modes for native `URLSearchParams`, `qs`, and `query-string`.
 - Advanced `qs` and `query-string` options for array formats, sorting, encoding, charset, null handling, parsing limits, dot notation, and primitive parsing.
 - Encoding comparison for browser-native `encodeURI`, `encodeURIComponent`, strict RFC 3986, and form-style plus encoding.
-- Installable PWA metadata and service worker caching for returning to the workbench offline after the first online visit.
+- Installable PWA metadata, offline caching, and prompts for offline mode or a ready app update.
 - GitHub Pages deployment through GitHub Actions.
 
 ## Query Parser Coverage
