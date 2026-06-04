@@ -57,6 +57,7 @@ import {
   setUrlPart,
   toggleRow,
 } from "./state";
+import { PwaPrompt, usePwaPromptState } from "./pwaPrompt";
 
 const parserOptions: { value: ParserMode; label: string }[] = [
   { value: "qs", label: "qs" },
@@ -121,6 +122,7 @@ function App() {
   const parserPreview = useStore($parserPreview);
   const encodingSample = useStore($encodingSample);
   const encodingComparison = useStore($encodingComparison);
+  const pwaPromptState = usePwaPromptState();
   const [shareState, setShareState] = useState("Ready");
 
   async function copyShareLink() {
@@ -259,6 +261,7 @@ function App() {
             github.com/vdustr/url-workbench
           </FooterLink>
         </Footer>
+        <PwaPrompt state={pwaPromptState} />
       </Shell>
     </>
   );
