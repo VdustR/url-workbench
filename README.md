@@ -6,7 +6,7 @@
 
 Inspect URL anatomy, edit query parameters, compare parser output, test encoding, and share reproducible URL states.
 
-Live app: https://vdustr.dev/url-workbench/
+Live app: https://vdustr.github.io/url-workbench/
 
 Repository: https://github.com/VdustR/url-workbench
 
