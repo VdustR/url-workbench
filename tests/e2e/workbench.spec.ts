@@ -3,7 +3,7 @@ import { expect, test } from "@playwright/test";
 test("edits URL anatomy and search rows", async ({ page }) => {
   await page.goto("/");
 
-  const totalUrl = page.getByLabel("Total URL");
+  const totalUrl = page.getByRole("textbox", { name: "Total URL", exact: true });
   await expect(totalUrl).toBeVisible();
   await expect(totalUrl).toHaveValue(/docs\.example\.com/);
 
